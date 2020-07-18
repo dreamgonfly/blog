@@ -405,24 +405,14 @@ GAN의 또 다른 한계점은 아직 텍스트를 생성하는 데는 적용하
 
 # 참고 자료
 
-> GAN: https://arxiv.org/abs/1406.2661
->
-> DCGAN:https://arxiv.org/abs/1511.06434
->
-> cGAN:https://arxiv.org/abs/1611.07004
->
-> WGAN: https://arxiv.org/abs/1701.07875
->
-> EBGAN:https://arxiv.org/abs/1609.03126
->
-> BEGAN:https://arxiv.org/abs/1703.10717
->
-> CycleGAN:https://arxiv.org/abs/1703.10593
->
-> DiscoGAN:https://arxiv.org/abs/1703.05192
->
-> StarGAN:https://arxiv.org/abs/1711.09020
->
-> SRGAN:https://arxiv.org/abs/1609.04802
->
-> SEGAN: https://arxiv.org/abs/1703.09452
+- GAN: https://arxiv.org/abs/1406.2661
+- DCGAN: https://arxiv.org/abs/1511.06434
+- cGAN: https://arxiv.org/abs/1611.07004
+- WGAN: https://arxiv.org/abs/1701.07875
+- EBGAN: https://arxiv.org/abs/1609.03126
+- BEGAN: https://arxiv.org/abs/1703.10717
+- CycleGAN: https://arxiv.org/abs/1703.10593
+- DiscoGAN: https://arxiv.org/abs/1703.05192
+- StarGAN: https://arxiv.org/abs/1711.09020
+- SRGAN: https://arxiv.org/abs/1609.04802
+- SEGAN: https://arxiv.org/abs/1703.09452
