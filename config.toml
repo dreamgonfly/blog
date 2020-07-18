@@ -8,7 +8,7 @@ baseURL = "https://dreamgonfly.github.io/"
 copyright = "© {year}"
 
 # Add your Disqus shortname here.
-# disqusShortname = "dreamgonfly-blog"
+disqusShortname = "dreamgonfly-blog"
 
 # Add your Google Analytics identifier: UA-XXXXXXXX-X
 # googleAnalytics = "UA-91026007-2" 
