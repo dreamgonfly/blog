@@ -6,7 +6,7 @@ aliases: ["/rnn/2017/09/04/understanding-rnn.html"]
 keywords: ["rnn", "deep learning"]
 draft: false
 tags: ["deep learning"]
-math: false
+math: true
 toc: true
 ---
 # Recurrent Neural Network (RNN) 이해하기
