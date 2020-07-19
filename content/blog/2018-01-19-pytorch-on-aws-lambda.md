@@ -10,7 +10,7 @@ math: false
 toc: true
 ---
 
-# AWS Lambda로 PyTorch 모델 서빙하기
+## AWS Lambda로 PyTorch 모델 서빙하기
 
 AWS Lambda는 서버 관리의 부담을 없애주는 서버 리스 컴퓨팅(Serverless computing) 서비스입니다. Lambda를 한마디로 설명하면 이벤트가 발생했을 때만 서버가 떠서 코드를 실행하는 이벤트 기반 클라우드 플랫폼입니다. Lambda는 코드가 실행된 시간에 대해서만 비용을 내는 효율성과, 이벤트가 갑자기 많이 발생해도 병렬처리가 가능한 확장성 덕분에 각광받고 있습니다.
 
@@ -20,7 +20,7 @@ AWS Lambda는 서버 관리의 부담을 없애주는 서버 리스 컴퓨팅(Se
 
 ![예제 파일 구성](https://files.slack.com/files-pri/T25783BPY-F8VCWU8GM/screenshot_2018-01-19_11.29.38.png?pub_secret=b61a06eeb7)
 
-# 샘플 모델 만들기
+## 샘플 모델 만들기
 
 이 글에서 예제로 사용할 모델은 PyTorch Tutorial에서 제공하는 [Generating Names with a Character-Level RNN](http://pytorch.org/tutorials/intermediate/char_rnn_generation_tutorial.html) 모델입니다. 텍스트로 인풋을 받고 텍스트로 아웃풋을 내기 때문에 API 설계가 간단해지는 장점이 있어 선택했습니다. 튜토리얼의 코드를 그대로 쓰되, 마지막에 학습된 모델을 저장하는 코드만 추가해서 사용하겠습니다. 아래는 맨 아래에 추가되는 코드입니다.
 
@@ -47,19 +47,19 @@ PyTorch 모델을 저장할 때는 모델 전체가 아니라 모델의 state di
 
 코드를 실행하면 저장된 모델 파일인 `model.pth`과 전처리를 위한 파라미터 파일인 `params.pkl`을 얻을 수 있습니다.
 
-# Docker 설치하기
+## Docker 설치하기
 
 Lambda에서 코드를 실행하는 환경과 동일한 환경을 로컬에 쉽게 구성하기 위해서는 Docker가 필요합니다. Lambda에 올린 코드를 디버깅할 때도 Docker에서 코드를 테스트해보는 것은 유용하죠.
 
 Docker가 이미 설치되어 있으신 분은 이 부분을 생략하고 바로 다음으로 넘어가셔도 됩니다.
 
-## MacOS & Windows
+### MacOS & Windows
 
 [Docker Community Edition 다운로드 페이지](https://store.docker.com/search?type=edition&offering=community)에서 원하는 환경의 설치 파일을 다운로드받으면 GUI 방식으로 쉽게 설치할 수 있습니다.
 
 ![MacOS에서 Docker 설치 화면](https://files.slack.com/files-pri/T25783BPY-F8TKZE5E3/screenshot_2018-01-14_17.31.30.png?pub_secret=a3d1253e1f)
 
-## Ubuntu
+### Ubuntu
 
 간편하게 만들어진 스크립트를 실행함으로써 Docker를 설치할 수 있습니다.
 
@@ -78,7 +78,7 @@ sudo usermod -aG docker <your-user>
 
 참고로 제가 실험해보았을 때는, 이 글의 뒤에 나오는대로 PyTorch를 설치하고 불필요한 파일을 삭제했을 때 Linux (Ubuntu 14.04)에서는 AWS Lambda에 올릴 수 있는 크기가 나왔지만 MacOS (Sierra)에서는 그보다 큰 용량이 나왔습니다. 여러가지 환경에 따라 결과는 달라질 수 있으니 직접 실험해보는 것을 권장합니다.
 
-# Amazon Linux Docker 이미지 다운받기
+## Amazon Linux Docker 이미지 다운받기
 
 Lambda에서 코드를 실행할 때 사용하는 환경은 Amazon Linux입니다. 따라서 Lambda의 배포 환경과 동일한 환경을 구축하기 위해서는 Docker를 이용해 Amazon Linux 이미지를 다운받아야 합니다.
 
@@ -93,7 +93,7 @@ REPOSITORY     TAG        IMAGE ID       CREATED         SIZE
 amazonlinux    latest     6133b2c7d7c2   2 hours ago     165MB
 ```
 
-# 배포 패키지 압축 파일 만들기
+## 배포 패키지 압축 파일 만들기
 
 이제 Lambda에 업로드할 압축 파일(.zip)을 만들어야 합니다. 이를 위해서 Amazon Linux 환경 위에 필요한 패키지들을 모두 설치하고 설치된 파일을 압축하는 과정이 필요합니다. 
 
@@ -193,13 +193,13 @@ Compressed size 71M
 
 이 압축파일을 Lambda에 올리고 API로 만드는 방법으로 넘어가기 전에, 위의 코드에서 중요한 부분을 몇가지 설명드리겠습니다.
 
-## PyTorch 설치하기
+### PyTorch 설치하기
 
 PyTorch를 CPU 버전으로 설치합니다. 참고로 CUDA 버전은 용량이 800MB에 달해서 Lambda에 올릴 수 있는 코드와 라이브러리 크기 제한인 250MB를 훨씬 뛰어넘습니다. Lambda에서는 CPU로 코드를 실행하기 때문에 CUDA 버전은 필요 없습니다.
 
 참고로 Lambda의 코드와 라이브러리 크기 제한은 압축 해제 시를 기준으로 합니다.
 
-## lambda_function.py
+### lambda_function.py
 
 `build_pack_script.sh` 코드 중 `add_pack`에서 `lambda_function.py`이란 파일을 압축 파일에 추가하는 부분이 있습니다. Lambda가 실제로 실행하는 코드는 바로 이 `lambda_function.py` 파일 안의 `lambda_handler`라는 함수입니다. 이 파일 역시 다른 라이브러리들과 함께 압축 파일 안에 포함되어 Lambda에 업로드되어야 합니다. 실행하는 파일과 함수의 이름을 Lambda 설정에서 변경할 수는 있지만 여기서는 디폴트 대로 파일과 함수 이름을 지었습니다. 
 
@@ -287,7 +287,7 @@ event: {'category': 'Russian', 'start_letters': 'RUS'}
 
 
 
-## model.py와 requirements.txt
+### model.py와 requirements.txt
 
 github에는 위에 설명드린 파일 외에도 몇가지 파일들이 더 있습니다.
 
@@ -295,9 +295,9 @@ github에는 위에 설명드린 파일 외에도 몇가지 파일들이 더 있
 
 `requirements.txt`는 추가적으로 필요한 파이썬 패키지들을 명시하는 곳입니다. Pandas 등 필요한 패키지를 이곳에 적어놓으면 `build_pack_script.sh`가 실행되어 압축 파일을 만들면서 명시된 패키지가 함께 들어갑니다. 이 때 Stripped size가 250MB를 넘어서는 안된다는 점을 명심해주세요. 참고로 예시에는 로컬에서 테스트를 위해 boto3가 포함되어 있지만, 실제 Lambda에는 boto3가 이미 설치되어 있으므로 생략하는 것이 좋습니다.
 
-# AWS Lambda로 배포하기
+## AWS Lambda로 배포하기
 
-## 압축 파일 및 모델 파일 업로드
+### 압축 파일 및 모델 파일 업로드
 
 AWS Lambda에 코드를 올리는 방법은 세 가지가 있습니다. 이 중 압축된 파일의 크기가 50MB를 넘는다면 압축 파일을 S3에 업로드한 뒤 Lambda에 압축 파일의 주소를 입력하는 방법을 사용해야 합니다. 이를 위해서 S3에 압축 파일을 업로드합니다. 또한 모델 파라미터와 전처리 파라미터 파일도 같이 S3에 업로드합니다.
 
@@ -307,7 +307,7 @@ AWS Lambda에 코드를 올리는 방법은 세 가지가 있습니다. 이 중 
 
 ![S3에 업로드된 압축 파일과 모델 및 전처리 파라미터 파일](https://files.slack.com/files-pri/T25783BPY-F8TM6NMUP/screenshot_2018-01-14_23.14.28.png?pub_secret=74984ee530)
 
-## IAM User 만들기
+### IAM User 만들기
 
 lambda 함수는 모델과 전처리 파라미터를 S3에서 가져오기 때문에 S3에 접근 권한이 필요합니다. root 권한을 줄 수도 있지만 보안에 취약해진다는 단점이 있습니다. 안전한 권한 관리를 위해서 S3 읽기 권한만 갖고 있는 새 IAM User를 만들어보겠습니다.
 
@@ -315,7 +315,7 @@ lambda 함수는 모델과 전처리 파라미터를 S3에서 가져오기 때�
 
 만들어진 유저의 Access key와 Secret access key는 안전한 곳에 잘 저장해놓아야 합니다. 한번 창을 닫으면 Access key와 Secret access key를 다시 볼 수 있는 방법은 없습니다.
 
-## lambda 함수 만들기
+### lambda 함수 만들기
 
 이제 새 lambda 함수를 만들어보겠습니다. `pytorch-lambda`라는 이름의 lambda 함수를 만듭니다. 이 때, 코드 및 라이브러리는 S3에 올려둔 압축 파일의 주소를 입력합니다.
 
@@ -323,7 +323,7 @@ lambda 함수는 모델과 전처리 파라미터를 S3에서 가져오기 때�
 
 여기서는 lambda 함수의 메모리와 시간 제한을 최대인 3GB와 5분으로 정했습니다. 이 제한은 필요한 만큼 설정하시면 됩니다.
 
-## API Gateway로 API 만들기
+### API Gateway로 API 만들기
 
 이렇게 설정한 lambda를 API로 만들어서 서비스할 차례입니다. API Gateway에서 새 API를 만들며 이미 있는 lambda 함수에 연결할 수 있습니다. 
 
@@ -335,7 +335,7 @@ API를 설정하고 나면 마지막으로 API를 호출할 수 있는 URL을 �
 
 ![새 API 만들기](https://files.slack.com/files-pri/T25783BPY-F8U4W55RP/create_api.gif?pub_secret=4a20b5a250)
 
-## 테스트하기
+### 테스트하기
 
 만들어진 API는 POST method로 호출해야 합니다. 커멘드 라인에서 url을 호출할 수 있게 해주는 curl로 간단하게 테스트 해볼 수 있습니다.
 
@@ -347,7 +347,7 @@ $ curl -d "{\"category\":\"Russian\", \"start_letters\":\"RUS\"}" -X POST https:
 
 lambda의 로그 확인은 AWS CloudWatch에서 합니다. **CloudWatch** > **Logs** > Log Group 선택 > Log Stream 선택으로 로그를 확인할 수 있습니다.
 
-## 빠른 개발을 위해서
+### 빠른 개발을 위해서
 
 lambda 함수를 개발하고 테스트하는 한 사이클에는 상당한 시간이 걸립니다. 코딩을 하고, docker에 환경을 구축한 뒤 압축해서 zip 파일로 만들고, 이를 S3에 업로드하고 다시 lambda에 넣은 뒤 url을 호출해 보아야 코드에 버그가 있는지 없는지 알 수 있습니다. 버그를 확인한 후 코드를 수정하고 나면 다시 위의 과정을 반복해야 하죠.
 
@@ -357,13 +357,13 @@ lambda 함수를 개발하고 테스트하는 한 사이클에는 상당한 시�
 
 `local_test.py`와 `local_test_script.sh`는 로컬에서 테스트를 할 수 있게 해주는 스크립트입니다. `local_test.py`를 수정하여 필요한 환경 변수와 event를 지정한 뒤 사용할 수 있습니다.
 
-# 마치며
+## 마치며
 
 이것으로 PyTorch 모델을 AWS Lambda로 서빙하는 과정을 마쳤습니다. PyTorch와 AWS Lambda의 조합은 간단한 딥러닝 모델을 서빙하는 데 최적의 조합입니다. 요청이 없을 때는 과금이 없으며, 요청이 갑자기 많아지더라도 서버가 죽을 걱정이 없이 서비스할 수 있기 때문이죠.
 
 이제 여러분도 딥러닝 모델을 만드는 것에서 끝나는 것이 아니라 언제 어디서나 사용할 수 있도록 서비스화할 수 있습니다.
 
-# Reference
+## Reference
 
 - [Serving PyTorch Models on AWS Lambda with Caffe2 & ONNX](https://machinelearnings.co/serving-pytorch-models-on-aws-lambda-with-caffe2-onnx-7b096806cfac)
 - [AWS Lambda에 Tensorflow/Keras 배포하기](https://beomi.github.io/2017/12/07/Deploy-Tensorflow-Keras-on-AWS-Lambda/)

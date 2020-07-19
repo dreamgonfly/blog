@@ -21,7 +21,7 @@ toc: true
 
 그럼 시작해 볼까요?
 
-# 1. 새 저장소(repository) 만들기
+## 1. 새 저장소(repository) 만들기
 
 GitHub에서 새 저장소(repository)를 만듭니다. 이 때 저장소의 이름을 자신의 username 뒤에 `.github.io`가 붙은 이름으로 짓습니다. 이렇게 해야 `yourname.github.io`의 도메인으로 접속할 수 있는 블로그가 됩니다.
 
@@ -31,7 +31,7 @@ GitHub에서 새 저장소(repository)를 만듭니다. 이 때 저장소의 이
 >
 > 프로젝트 별로 페이지를 만들 수도 있습니다. 이 때는 프로젝트 이름이 `yourname.github.io`가 아니어도 상관 없으며 이미 존재하는 프로젝트에 페이지를 만들 수도 있습니다. 다만 이렇게 만든 페이지는 `yourname.github.io/projectname`의 url로 접속하게 됩니다.
 
-# 2. 마음에 드는 Jekyll 테마 찾기
+## 2. 마음에 드는 Jekyll 테마 찾기
 
 GitHub에는 이미 [수백 개의 Jekyll 테마](https://github.com/topics/jekyll-theme)가 공개되어 있습니다. jekyll-theme이라는 topic을 갖고 있는 repository는 모두 공개된 jekyll 테마인데요. 이 중 어떤 테마든 내 블로그에 적용하고 싶은 테마를 선택해 보세요.
 
@@ -39,7 +39,7 @@ GitHub에는 이미 [수백 개의 Jekyll 테마](https://github.com/topics/jeky
 
 이 글에서는 테마 리스트에서 가장 위에 보이는 minimal-mistakes라는 테마를 사용해 보겠습니다.
 
-# 3. `_config.yml` 파일 가져오기
+## 3. `_config.yml` 파일 가져오기
 
 ![`_config.yml` 파일 가져오기](https://files.slack.com/files-pri/T25783BPY-F91H9F9K9/2018-01-29_23_01_37.gif?pub_secret=7c0ba1db24)
 
@@ -117,7 +117,7 @@ repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-m
 
 설정 파일에서 이외에도 제목, 저자, 설명, 페이스북 설정 등 원하는 대로 설정을 바꾸셔도 됩니다.
 
-# 4. index 파일 가져오기
+## 4. index 파일 가져오기
 
 * 선택한 테마 저장소(repository)에서 `index.html`, `index.md` 등의 파일을 찾습니다. 이 예시에서 사용하는 테마는 `index.html`이라는 이름의 파일로 있습니다. 이 파일이 Jekyll이 사이트를 생성할 때 가장 처음 보여주는 페이지입니다.
 * `index` 파일과 동일한 이름과 동일한 내용의 파일을 자신의 저장소(repository)에서도 만듭니다. 이 예시에서 `index.html`의 내용은 다음과 같이 몇 줄 되지 않습니다.
@@ -133,7 +133,7 @@ author_profile: true
 
 테마에 따라서 추가로 가져와야 하는 파일이 있을 수도 있습니다. 예를 들어 어떤 테마에서는 `posts.md`라는 파일이 있어야 합니다. 페이지가 제대로 작동하지 않는다면 테마에 따라서 필요한 파일을 확인해 주세요.
 
-# 5. `_posts`에 새 글 쓰기
+## 5. `_posts`에 새 글 쓰기
 
 * 자신의 GitHub 저장소에서 **Create new file**을 눌러 새 파일을 생성합니다.
 * 파일 이름에 `_posts/2018-01-26-first-post.md`을 입력합니다. 이 때 `/` 앞의 `_posts`는 폴더 이름으로 인식되며 GitHub에서 자동으로 폴더를 생성합니다. Jekyll은 `_posts` 아래의 markdown 글들을 블로그 포스트로 인식하고 블로그에서 보여주는데요. 파일 이름은 일반적으로 `YYYY-MM-DD-name-of-post.md` 형식으로 짓습니다.
@@ -176,7 +176,7 @@ Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most ou
 
 ![새 포스트 만들기](https://files.slack.com/files-pri/T25783BPY-F8Z2HJ9PC/screenshot_2018-01-26_17.06.25.png?pub_secret=c19592b80f)
 
-# 확인하기
+## 확인하기
 
 `yourname.github.io`로 접속하여 GitHub Pages가 잘 만들어졌는지 확인할 수 있습니다. 
 
@@ -190,7 +190,7 @@ Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most ou
 
 ![GitHub Pages 활성화하기](https://files.slack.com/files-pri/T25783BPY-F8ZJAPDD2/screenshot_2018-01-27_15.02.43.png?pub_secret=b0da820a8c)
 
-# 마치며
+## 마치며
 
 이 글에서 소개드린 방법의 핵심은 [jekyll remote theme](https://github.com/benbalter/jekyll-remote-theme)이었습니다. Jekyll remote theme은 GitHub에 공개되어 있는 어떤 Jekyll 테마든지 가져와서 쓸 수 있도록 하는 Jekyll의 플러그인입니다. [Jekyll remote theme이 GitHub Pages에 내장](https://github.com/blog/2464-use-any-theme-with-github-pages)되어 있었기 때문에 이 글에서 소개한 방법이 가능했던 것입니다.
 

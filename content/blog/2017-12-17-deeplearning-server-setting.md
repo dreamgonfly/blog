@@ -11,7 +11,7 @@ toc: true
 ---
 어제 딥러닝용 1080 Ti GPU 서버의 개발 환경 세팅을 마쳤습니다. 이 글에서는 서버 구매부터 Ubuntu 설치, NVIDIA driver, CUDA 및 cuDNN 설치, 그리고 Tensorflow와 PyTorch 설치까지 제가 개발 환경을 세팅한 방법을 정리했습니다.
 
-# 하드웨어 구성
+## 하드웨어 구성
 
 참고를 위해 제가 구성한 서버 하드웨어도 보여드리겠습니다.
 
@@ -38,7 +38,7 @@ toc: true
 
 주문을 완료한 뒤 배송이 오면 이제 개발 환경을 세팅할 차례입니다.
 
-# Ubuntu 설치하기
+## Ubuntu 설치하기
 
 Ubuntu 14.04를 설치합니다. 최신 LTS인 16.04는 GTX1080 Ti GPU가 달린 서버에서 바로 부팅 시 검은 화면만 뜨는 문제가 있습니다. 설정을 바꿔 이 문제를 우회할 수는 있지만 설치 과정에서 복잡성을 최소화하기 위해 14.04를 설치하는 방법을 택했습니다. 14.04는 언제든지 16.04로 업그레이드할 수 있습니다.
 
@@ -67,17 +67,13 @@ USB 하나를 부팅 디스크로 만들어야 합니다.
 
 ![UNetbootin으로 부팅 디스크 만들기](https://files.slack.com/files-pri/T25783BPY-F8GGX7F0W/screenshot.png?pub_secret=32447bd174)
 
-
-
 이제 부팅 디스크가 만들어졌습니다. 이 USB를 서버에 꽂은 뒤 BIOS에서 부팅을 할 때 **Boot Menu**에서 USB에 해당하는 항목을 클릭한 뒤 **Install Ubuntu**를 선택한 뒤 나오는 안내에 따라 설정을 입력하면 Ubuntu 설치가 완료됩니다.
 
-
-
-##### 트러블 슈팅
+### 트러블 슈팅
 
 서버의 전원을 켰을 때 `CPU Fan speed error detected`라는 문구가 계속해서 떴습니다. 이는 제가 수냉식 쿨러를 사용했고 ASUS 메인보드에서 이슈가 있었기 때문이었습니다. BIOS 상에서 Fan 설정을 바꾸어서 해결했습니다. (참고 : [아수스 CPU Fan speed errer detected 해결하기](http://rgy0409.tistory.com/1165))
 
-# NVIDIA driver 설치하기
+## NVIDIA driver 설치하기
 
 Ubuntu에서 NVIDIA driver를 설치하는 가장 간단하고 권장되는 방법은 운영체제가 제공하는 설정 메뉴에서 GUI 그래픽 드라이버 설치 방법를 따르는 것입니다.
 
@@ -96,7 +92,7 @@ Ubuntu에서 NVIDIA driver를 설치하는 가장 간단하고 권장되는 방�
 
 ![driver 설치 후 nvidia-smi가 정상적으로 표시된 화면](https://files.slack.com/files-pri/T25783BPY-F8F6NLDEC/smi.png?pub_secret=7ecd36a66c)
 
-##### 참고 자료
+## 참고 자료
 
 CLI를 이용해 NVIDIA driver를 설치하고 싶다면 다음 자료를 참고합니다. 다만 두번째 링크에서도 밝히고 있듯이 이는 권장되는 방식은 아닙니다.
 
@@ -105,7 +101,7 @@ CLI를 이용해 NVIDIA driver를 설치하고 싶다면 다음 자료를 참고
 
 
 
-# CUDA 설치하기
+## CUDA 설치하기
 
 현재 CUDA 최신 버전은 9.1이지만 TensorFlow는 CUDA 8.0 설치를 요구하고 있습니다. 따라서 여기에서도 CUDA 8.0을 설치하겠습니다.
 
@@ -136,12 +132,12 @@ export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY
 
 
 
-##### 참고 자료
+### 참고 자료
 
 * [Ubuntu에 CUDA 설치](http://haanjack.github.io/cuda/2016-02-29-cuda-linux/)
 * [Ubuntu 16.04 LTS에 tensorflow gpu버전 설치하기](https://seojmediview.com/2017/08/09/ubuntu-16-04-lts%ec%97%90-tensorflow-gpu%eb%b2%84%ec%a0%84-%ec%84%a4%ec%b9%98%ed%95%98%ea%b8%b0/)
 
-# cuDNN 설치하기
+## cuDNN 설치하기
 
 TensorFlow가 cuDNN 6.0을 요구하므로 최신 버전인 7.0이 아닌 6.0 버전을 설치해보겠습니다.
 
@@ -166,13 +162,13 @@ sudo cp cuda/lib64/libcudnn* /usr/local/cuda-8.0/lib64
 sudo chmod a+r /usr/local/cuda-8.0/include/cudnn.h /usr/local/cuda-8.0/lib64/libcudnn*
 ```
 
-##### 참고 자료
+### 참고 자료
 
 * [Ubuntu 16.04 LTS에 tensorflow gpu버전 설치하기](https://seojmediview.com/2017/08/09/ubuntu-16-04-lts%ec%97%90-tensorflow-gpu%eb%b2%84%ec%a0%84-%ec%84%a4%ec%b9%98%ed%95%98%ea%b8%b0/)
 
 
 
-# Anaconda 설치하기
+## Anaconda 설치하기
 
 Anaconda는 Python과 여러 라이브러리들을 설치하는 가장 편리하고 빠른 방법입니다. 현재 Anaconda를 다운받으면 Python 3.6으로 설치되지만, [TensorFlow 1.4 GPU 버전이 아직 Python 3.6을 지원하지 않기 때문에](https://github.com/tensorflow/tensorflow/issues/14182) Python 3.5 환경으로 맞춰줄 필요가 있습니다. 여기에서는 Python 3.5를 지원하는 Anaconda의 이전 버전을 설치하겠습니다.
 
@@ -209,7 +205,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 
 
-# Tensorflow 설치하기
+## Tensorflow 설치하기
 
 이 글을 작성하는 때에 TensorFlow의 최신 버전은 1.4입니다. 최신 버전인 TensorFlow 1.4 버전을 설치해 보겠습니다. TensorFlow에서는 가상 환경 위에 설치를 권장하고 있지만 여기에서는 사용의 편리함을 위해 디폴트 Python 위에 pip으로 바로 설치합니다.
 
@@ -245,7 +241,7 @@ totalMemory: 10.91GiB freeMemory: 10.49GiB
 
 
 
-### PyTorch 설치하기
+## PyTorch 설치하기
 
 PyTorch 설치는 공식 사이트(www.pytorch.org)를 그대로 따르면 됩니다. conda로 Python 3.5, CUDA 8.0 버전을 설치하였습니다.
 
@@ -255,7 +251,7 @@ conda install pytorch torchvision -c pytorch
 
 
 
-# 네트워크 연결하기
+## 네트워크 연결하기
 
 이제 서버 개발 환경 세팅은 완료되었으니, 이 서버를 다른 컴퓨터에서도 접속할 수 있게 만들어야 합니다. 이를 위해서 외부 포트를 내부 포트로 연결하는 포트 포워딩을 설정하고, Ubuntu 내에서 SSH를 외부에서 접근 가능하도록 설정합니다.
 
