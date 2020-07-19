@@ -20,7 +20,7 @@ toc: true
 
 ### CUDA Cores vs. Stream Processors
 
-AMD는 자사의 GPU core를 Stream Processor라고 부릅니다. CUDA Core와 Stream Processor의 역할은 같습니다. 그러나 두 회사의 GPU 아키텍쳐는 다르기 때문에 CUDA Cores의 수와 Stream Processor의 수를 직접 비교할 수는 없습니다. 즉, 500개의 CUDA Cores가 500개의 Stream Processor와 같은 성능을 갖지는 않습니다. GPU 간 정확한 성능 비교 위해서는 benchmark test를 사용합니다.
+AMD는 자사의 GPU core를 **Stream Processor**라고 부릅니다. CUDA Core와 Stream Processor의 역할은 같습니다. 그러나 두 회사의 GPU 아키텍쳐는 다르기 때문에 CUDA Cores의 수와 Stream Processor의 수를 직접 비교할 수는 없습니다. 즉, 500개의 CUDA Cores가 500개의 Stream Processor와 같은 성능을 갖지는 않습니다. GPU 간 정확한 성능 비교 위해서는 benchmark test를 사용합니다.
 
 ### Number of CUDA Cores and computing power
 
@@ -32,13 +32,13 @@ AMD는 자사의 GPU core를 Stream Processor라고 부릅니다. CUDA Core와 S
 
 ## Tensor Cores
 
-Tensor core를 한마디로 정리하면, 4x4 행렬 연산을 수행하는 GPU core입니다. CUDA Core가 1 GPU clock에 하나의 fp32 부동소수점 연산을 수행하는 데 비해, Tensor Core는 1 GPU clock에 4x4짜리 fp16 행렬을 두 개를 곱하고 그 결과를 4x4 fp32 행렬에 더하는 **matrix multiply-accumulate** 연산을 수행합니다. multiply-accumulate 연산이란 A와 B를 곱하고 C를 더하는 과정을 하나의 연산에서 한번에 수행하는 것입니다. Tensor Core의 matrix multiply-accumulate 연산을 그림으로 나타내면 다음과 같습니다.
+Tensor Core를 한마디로 정리하면, 4x4 행렬 연산을 수행하는 GPU core입니다. CUDA Core가 1 GPU clock에 하나의 fp32 부동소수점 연산을 수행하는 데 비해, Tensor Core는 1 GPU clock에 4x4짜리 fp16 행렬을 두 개를 곱하고 그 결과를 4x4 fp32 행렬에 더하는 matrix **multiply-accumulate** 연산을 수행합니다. multiply-accumulate 연산이란 A와 B를 곱하고 C를 더하는 과정을 하나의 연산에서 한번에 수행하는 것입니다. Tensor Core의 matrix multiply-accumulate 연산을 그림으로 나타내면 다음과 같습니다.
 
 ![multiply-accumulate](/images/cuda-cores-vs-tensor-cores/multiply-accumulate.png)
 
 
 
-이 과정은 fp16 행렬을 입력으로 받고 fp32 행렬로 출력을 반환하기 때문에 mixed precision이라고 불립니다. Volta 이상의 아키텍쳐에 기반한 GPU에서만 딥러닝 학습 시 mixed precision을 쓸 수 있는 것은 이 때문입니다. (Volta 이전의 아키텍쳐에서는 mixed precision을 시뮬레이션할 수는 있지만 실제 속도는 빨라지지 않습니다.)
+이 과정은 fp16 행렬을 입력으로 받고 fp32 행렬로 출력을 반환하기 때문에 **mixed precision**이라고 불립니다. Volta 이상의 아키텍쳐에 기반한 GPU에서만 딥러닝 학습 시 mixed precision을 쓸 수 있는 것은 이 때문입니다. (Volta 이전의 아키텍쳐에서는 mixed precision을 시뮬레이션할 수는 있지만 실제 속도는 빨라지지 않습니다.)
 
 이처럼 부동소수점 연산에 사용되는 multiply-accumulate 연산은 (rounding이 한번일 때) **FMA (fused multiply-add)**라고 불리기도 합니다. 각 Tensor core는 한 번의 GPU clock에 64개의 부동소수점 FMA mixed precision 연산을 합니다. 출력 행렬의 한 원소를 계산하는 데 4개의 FMA 연산이 필요하고 총 4x4개의 원소가 있기 때문입니다. 각각의 FMA 연산을 도식화하면 아래 그림과 같습니다.![fma](/images/cuda-cores-vs-tensor-cores/fma.png)
 
@@ -68,7 +68,7 @@ Titan V 또는 V100의 spec을 살펴보면 딥러닝용 연산 속도가 125 te
 
 ## Turing Tensor Cores
 
-Nvidia가 Turing 아키텍쳐에 도입한 Turing Tensor Core는 Tensor Core에 딥러닝 모델의 인퍼런스를 위해 INT8과 INT4 연산을 추가했습니다. 연산에 필요한 비트 수를 낮추어 연산 속도를 빠르게 하는 quantization 기법이 적용된 모델이라면 이를 활용해서 인퍼런스 속도를 높일 수 있습니다. 아래 애니메이션에서 살펴볼 수 있듯이 비트 수가 줄어들 수록 연산 처리량은 더욱 많아집니다.
+Nvidia가 Turing 아키텍쳐에 도입한 Turing Tensor Core는 Tensor Core에 딥러닝 모델의 인퍼런스를 위해 **INT8**과 **INT4** 연산을 추가했습니다. 연산에 필요한 비트 수를 낮추어 연산 속도를 빠르게 하는 quantization 기법이 적용된 모델이라면 이를 활용해서 인퍼런스 속도를 높일 수 있습니다. 아래 애니메이션에서 살펴볼 수 있듯이 비트 수가 줄어들 수록 연산 처리량은 더욱 많아집니다.
 
 ![turing-tensor-cores](/images/cuda-cores-vs-tensor-cores/turing-tensor-cores.gif)
 
