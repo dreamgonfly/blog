@@ -20,7 +20,7 @@ toc: true
 
 ### CUDA Cores vs. Stream Processors
 
-AMD는 자사의 GPU core를 Stream processor라고 부릅니다. CUDA Core와 Stream processor의 역할은 같습니다. 그러나 두 회사의 GPU 아키텍쳐는 다르기 때문에 CUDA Cores의 수와 Stream Processor의 수를 직접 비교할 수는 없습니다. 즉, 500개의 CUDA Cores가 500개의 Stream Processor와 같은 성능을 갖지는 않습니다. GPU 간 정확한 성능 비교 위해서는 benchmark test를 사용합니다.
+AMD는 자사의 GPU core를 Stream Processor라고 부릅니다. CUDA Core와 Stream Processor의 역할은 같습니다. 그러나 두 회사의 GPU 아키텍쳐는 다르기 때문에 CUDA Cores의 수와 Stream Processor의 수를 직접 비교할 수는 없습니다. 즉, 500개의 CUDA Cores가 500개의 Stream Processor와 같은 성능을 갖지는 않습니다. GPU 간 정확한 성능 비교 위해서는 benchmark test를 사용합니다.
 
 ### Number of CUDA Cores and computing power
 
