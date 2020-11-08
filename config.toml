@@ -11,7 +11,9 @@ copyright = "© {year}"
 disqusShortname = "dreamgonfly-blog"
 
 # Add your Google Analytics identifier: UA-XXXXXXXX-X
-# googleAnalytics = "UA-91026007-2" 
+googleAnalytics = "UA-91026007-2" 
+
+ignoreErrors = ["error-remote-getjson"]
 
 # Optional params
 [params]
@@ -48,13 +50,15 @@ disqusShortname = "dreamgonfly-blog"
 
 # Controls the navigation
 [[menu.main]]
+  identifier = "blog"
+  name = "blog"
+  title = "Blog"
+  url = "/blog"
+
+[[menu.main]]
   identifier = "about"
   name = "about"
   title = "About"
   url = "/"
 
-[[menu.main]]
-  identifier = "blog"
-  name = "blog"
-  title = "Blog"
-  url = "/blog"
+
